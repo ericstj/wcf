@@ -3,24 +3,9 @@
 
   <PropertyGroup>
     <HarvestProject>$(RepoRoot)\src\harvest\harvest.csproj</HarvestProject>
-    <SkipCopyBuildProduct>true</SkipCopyBuildProduct>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificBuildOutput);AddHarvestedFilesToPackage</TargetsForTfmSpecificContentInPackage>
+    <NoOpBuild>true</NoOpBuild>
   </PropertyGroup>
-
-  <!-- Override CoreCompile so that we don't build anything. -->
-  <Target Name="CoreCompile" />
-  <!-- Since we are't building, make sure the outputgroups used by packaging will be empty -->
-  <Target Name="BuiltProjectOutputGroup">
-    <ItemGroup>
-      <BuiltProjectOutputGroupOutput Remove="@(BuiltProjectOutputGroupOutput)" />
-    </ItemGroup>
-  </Target>
-  <Target Name="DebugSymbolsProjectOutputGroup">
-    <ItemGroup>
-      <!-- make sure to delete the static-defined item -->
-      <DebugSymbolsProjectOutputGroupOutput Remove="@(DebugSymbolsProjectOutputGroupOutput)" />
-    </ItemGroup>
-  </Target>
 
   <Target Name="_GetPathToHarvest">
     <MSBuild Projects="$(HarvestProject)"
@@ -39,4 +24,6 @@
     </ItemGroup>
     <Error Condition="'@(_harvestedItems)' == ''" Text="Could not harvest any files from $(_pathToHarvest)\%(HarvestIncludePaths.Identity) "/>
   </Target>
+
+  <Import Project="noopBuild.targets" />
 </Project>

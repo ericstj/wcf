@@ -2,5 +2,6 @@
 <Project>
   <Import Project="Sdk.targets" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="eng\harvest.targets" Condition="'$(HarvestFromPackage)' == 'true'" />
+  <Import Project="eng\noopBuild.targets" Condition="'$(NoOpBuild)' == 'true'" />
   <Import Project="eng\uwp.targets" />
 </Project>

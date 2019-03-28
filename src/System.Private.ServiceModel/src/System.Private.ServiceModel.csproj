@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <AssemblyVersion>4.6.0.0</AssemblyVersion>
+    <PackageId>System.Private.ServiceModel2</PackageId>
     <AssemblyName>System.Private.ServiceModel</AssemblyName>
     <RootNamespace>System.ServiceModel</RootNamespace>
     <!-- https://docs.microsoft.com/en-us/nuget/reference/target-frameworks -->
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
     <OutputType>Library</OutputType>
     <NoWarn>$(NoWarn);1634;1691;649</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -15,6 +16,7 @@
     <CLSCompliant>true</CLSCompliant>
     <IsImplementationAssembly>true</IsImplementationAssembly>
     <IsPackable>true</IsPackable>
+    <NoOpBuild Condition="'$(TargetFramework)' == 'netstandard1.0'">true</NoOpBuild>
   </PropertyGroup>
 
   <!-- [todo:arcade] Added this because our released S.P.SM package includes the "_BlockReflectionAttribute" but it is included not only in the UAP* assembly but also the other shipped assembly, should this only be in the binary built for uap? -->
@@ -45,11 +47,15 @@
     <DefineConstants>$(DefineConstants);FEATURE_CORECLR</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Reflection.DispatchProxy"
                       Version="$(SystemReflectionDispatchProxyPackageVersion)" />
     <PackageReference Include="System.Security.Principal.Windows"
                       Version="$(SystemSecurityPrincipalWindowsPackageVersion)" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+    <PackageReference Include="System.Private.ServiceModel"
+                      Version="4.5.3" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('uap'))">
